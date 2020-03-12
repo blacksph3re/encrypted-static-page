@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Feuertheater Newsletter Decryptor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/openpgp/4.6.2/openpgp.min.js" integrity="sha256-txcrHjb7Yt1zrebRnGkk5OwDkoBrvJTjvJx5b7qBtWc=" crossorigin="anonymous"></script>
+    <script>
+      let encrypted = `{{ content }}`;
+      const decrypt = async function() {
+        const password = document.getElementById('password').value;
+        const msg = await openpgp.message.readArmored(encrypted);
+        const { data: decrypted } = await openpgp.decrypt({
+          message: msg,
+          passwords: [password],
+        })
+        document.open();
+        document.write(decrypted);
+        document.close();
+      };
+    </script>
+  </head>
+  <body>
+    <label>We store our newsletters pgp encrypted. Ask Nico why! Enter the password to decrypt the newsletter.</label>
+    <input id="password" type="password">
+    <button onclick="decrypt()" type="button">Decrypt</button>
+  </body>
+</html>
