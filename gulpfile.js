@@ -1,10 +1,12 @@
+// Change this password before use!
+const password='lol';
+
+
 const gulp = require('gulp');
 const gulpInline = require('gulp-inline');
 const transform = require('gulp-transform');
 const openpgp = require('openpgp');
 const fs = require('fs');
-
-const password='lol';
 
 const decryptWrapper = fs.readFileSync('decrypt.html').toString();
 
