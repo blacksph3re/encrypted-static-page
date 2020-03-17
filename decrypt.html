@@ -8,14 +8,23 @@
       let encrypted = `{{ content }}`;
       const decrypt = async function() {
         const password = document.getElementById('password').value;
-        const msg = await openpgp.message.readArmored(encrypted);
-        const { data: decrypted } = await openpgp.decrypt({
-          message: msg,
-          passwords: [password],
-        })
-        document.open();
-        document.write(decrypted);
-        document.close();
+        try {
+          document.getElementById('decrypting').style.display = 'block';
+          document.getElementById('wrong-pw').style.display = 'none';
+
+          const msg = await openpgp.message.readArmored(encrypted);
+          const { data: decrypted } = await openpgp.decrypt({
+            message: msg,
+            passwords: [password],
+          })
+          document.open();
+          document.write(decrypted);
+          document.close();
+        } catch(e) {
+          document.getElementById('decrypting').style.display = 'none';
+          document.getElementById('wrong-pw').style.display = 'block';
+        }
+
       };
     </script>
   </head>
@@ -23,5 +32,7 @@
     <label>We store our newsletters pgp encrypted. Ask Nico why! Enter the password to decrypt the newsletter.</label>
     <input id="password" type="password">
     <button onclick="decrypt()" type="button">Decrypt</button>
+    <span id="decrypting" style="display:none;">Decrypting...</span>
+    <span id="wrong-pw" style="display:none;">Could not decrypt the page - is the password correct?</span>
   </body>
 </html>
